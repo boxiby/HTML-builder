@@ -1,23 +1,24 @@
 const fs = require('fs');
 const path = require('path');
 
+const mainPath = path.resolve(__dirname, 'secret-folder');
 
-fs.readdir(path.resolve(__dirname, 'secret-folder'), function (err, items) {
-  console.log(items);
+fs.readdir(mainPath, (err, items) => {
+  if (err) { console.error(err); }
 
-  for (let i = 0; i < items.length; i++) {
-    console.log(items[i]);
-  }
+  items.forEach(
+    item => {
+      const itemPath = path.resolve(mainPath, item);
+      fs.stat(itemPath, (err, stats) => {
+        if (err) { console.error(err); }
+        if (stats.isFile()) {
+          const itemSizeInBytes = stats.size;
+          const itemSizeInKb = itemSizeInBytes / 1024;
+          const itemName = path.basename(item, path.extname(item));
+          const itemExt = path.extname(item).replace('.', '');
+          console.log(`${itemName}-${itemExt}-${itemSizeInKb.toFixed(3)}kb`);
+        }
+      });
+    }
+  )
 });
-
-
-// fs.stat(path.resolve(__dirname, 'secret-folder'), (err, stats) => {
-//   if (err) {
-//     console.error(err)
-//     return
-//   }
-//   stats.isFile() //true
-//   stats.isDirectory() //false
-//   stats.isSymbolicLink() //false
-//   stats.size //1024000 //= 1MB
-// })
