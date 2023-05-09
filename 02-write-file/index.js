@@ -7,7 +7,7 @@ const rl = readline.createInterface({
   output: process.stdout
 });
 
-fs.writeFile(path.resolve(__dirname, 'output.txt'), ' ', (err) => {
+fs.writeFile(path.resolve(__dirname, 'output.txt'), '', (err) => {
   if (err) throw err;
   console.log('Добро пожаловать! Введите текст для записи в файл:');
 });
